@@ -79,10 +79,15 @@ const createClient = (args, context) =>
 // update client by id
 const updateClient = (args, context) =>
   new Promise((resolve, reject) => {
-    console.log('no early exit');
+    const name = args.client.name;
+    const email = args.client.email;
+    const phone = args.client.phone;
+
     context.db.query(
       `UPDATE clients SET ${
-        args.client.name ? `name = "${args.client.name}"` : null
+        name ? `name = "${name}"${email || phone ? ',' : ''}` : ''
+      } ${email ? `email = "${email}"${phone ? ',' : ''}` : ''} ${
+        phone ? `phone = "${phone}"` : ''
       } WHERE id=${args.client.id};`,
       (err, res, _) => {
         //console.log(res);
